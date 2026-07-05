@@ -1,0 +1,43 @@
+name: Auto Comment on Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment-on-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on bug issue
+        if: contains(github.event.issue.labels.*.name, 'bug')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you. We will fix it. Best regards, tianyouyiwang.'
+            })
+      - name: Comment on feature issue
+        if: contains(github.event.issue.labels.*.name, 'feature')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you, we will consider to include this feature. Best regards, tianyouyiwang.'
+            })
+      - name: Comment on discussion issue
+        if: contains(github.event.issue.labels.*.name, 'discussion')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Happy to discuss this topic with you. Best regards, tianyouyiwang.'
+            })
